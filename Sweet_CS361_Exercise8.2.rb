@@ -80,6 +80,3 @@ class Player
     end
 end
 
-class Go
-    # [code for Go class]
-end
