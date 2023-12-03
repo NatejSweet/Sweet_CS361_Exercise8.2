@@ -31,8 +31,8 @@ end
 
 class Chess
     def initialize(args)
-        @players = args[:players] #changed to use args
-        @players.length().times { |x| @players[x].set_color(self.pick_color(x)) } # changed to set the color of a player
+        players = [] #changed to use args
+        @players.each { |x,y| players.append(Player.new(name:x, color:y)) }#changed to create players similar to in go
     end
 
     def play_game()
@@ -53,13 +53,6 @@ class Chess
         @players[i].color # changed to use the attr_reader
     end
 
-    def pick_color(i)         # picks a color for a player
-        if i == 0
-            return "white"
-        else
-            return "black"
-        end
-    end
 end
 
 class Player
@@ -78,7 +71,7 @@ end
 class Go
     def initialize(players)
         @players = []
-        players.each { |x| @players.append(Player.new(name:x, color:y)) }
+        @players.each { |x,y| players.append(Player.new(name:x, color:y)) } #changed to use the args, needed to iterate throught passed array, appending to instance array
     end
     def play()
         puts "Players in the go game:"
