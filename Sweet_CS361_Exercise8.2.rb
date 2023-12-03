@@ -1,4 +1,4 @@
-class Poker
+class Poker < Game
     def initialize(args)
         @players = args[:players] # changed to use args
         # @hands = [] Removed hands since each player will have a hand
@@ -29,10 +29,11 @@ class Poker
     end
 end
 
-class Chess
+class Chess < Game
+    attr_reader :players # added to use the attr_reader
     def initialize(args)
-        players = [] #changed to use args
-        @players.each { |x,y| players.append(Player.new(name:x, color:y)) }#changed to create players similar to in go
+        @players = [] #changed to use args
+        args[:players].each { |x,y| @players.append(Player.new(name:x, color:y)) }#changed to create players similar to in go
     end
 
     def play_game()
@@ -68,10 +69,11 @@ class Player
         cards.each { |card| @hand.append(card) }
     end
 end
-class Go
-    def initialize(players)
+class Go < Game
+    attr_reader :players
+    def initialize(args)
         @players = []
-        @players.each { |x,y| players.append(Player.new(name:x, color:y)) } #changed to use the args, needed to iterate throught passed array, appending to instance array
+        args[:players].each { |x,y| players.append(Player.new(name:x, color:y)) } #changed to use the args, needed to iterate throught passed array, appending to instance array
     end
     def play()
         puts "Players in the go game:"
@@ -82,35 +84,38 @@ class Go
         return "[pretend these are go results]"
         end
 end
+class Game 
+    attr_reader :players, :game
+    def initialize(args)
+        @players = args[:players]
+    end
+
+    def play()
+        args[:game].play()
+        puts args[:game].get_results
+
+    end
+
+end
 class PlayGames
-    def initialize(game_number, player_list)
-        @player_list = player_list
-        @game_number = game_number
+    attr_reader :player_list, :game
+    def initialize(args)
+        @player_list = args[:player_list]
+        @game = args[:game].new(@player_list)
     end
     def play()
-        case @game_number
-            when 1
-                poker = Poker.new(@player_list)
-                poker.play_poker()
-                puts poker.get_results()
-            when 2
-                chess = Chess.new(@player_list)
-                chess.play_game()
-                puts chess.get_results()
-            when 3
-                go = Go.new(@player_list)
-                go.play()
-                puts go.get_score()
-            end
+        @game.play()
     end
 end
 
-pg = PlayGames.new(1, ["alice", "bob", "chris", "dave"])
+
+
+pg = PlayGames.new(Poker, ["alice", "bob", "chris", "dave"])
 pg.play()
 puts
-pg = PlayGames.new(2, [["alice", "white"], ["bob", "black"]])
+pg = PlayGames.new(Chess, [["alice", "white"], ["bob", "black"]])
 pg.play()
 puts
-pg = PlayGames.new(3, [["alice", "white"], ["bob", "black"]])
+pg = PlayGames.new(Go, [["alice", "white"], ["bob", "black"]])
 pg.play()
 
