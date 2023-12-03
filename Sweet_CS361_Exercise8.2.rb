@@ -20,7 +20,7 @@ class Poker
     end
 
     def get_player_hand(i)
-        return @playes[i].get_hand
+        return @players[i].get_hand
     end
 
     def create_hand()
@@ -67,16 +67,57 @@ class Player
 
     def initialize(args)        #changed to use args
         @name = args[:name]
-        @color = nil
+        @color = args[:color]
         @hand = []
     end
 
     def append_to_hand(cards)       # append the passed to the hand
         cards.each { |card| @hand.append(card) }
     end
-
-    def set_color(color)        # set the color of the player
-        @color = color
+end
+class Go
+    def initialize(players)
+        @players = []
+        players.each { |x| @players.append(Player.new(name:x, color:y)) }
+    end
+    def play()
+        puts "Players in the go game:"
+        @players.each { |player| puts "#{player.name}: #{player.color}" }
+        # [pretend there's code here]
+        end
+    def get_score()
+        return "[pretend these are go results]"
+        end
+end
+class PlayGames
+    def initialize(game_number, player_list)
+        @player_list = player_list
+        @game_number = game_number
+    end
+    def play()
+        case @game_number
+            when 1
+                poker = Poker.new(@player_list)
+                poker.play_poker()
+                puts poker.get_results()
+            when 2
+                chess = Chess.new(@player_list)
+                chess.play_game()
+                puts chess.get_results()
+            when 3
+                go = Go.new(@player_list)
+                go.play()
+                puts go.get_score()
+            end
     end
 end
+
+pg = PlayGames.new(1, ["alice", "bob", "chris", "dave"])
+pg.play()
+puts
+pg = PlayGames.new(2, [["alice", "white"], ["bob", "black"]])
+pg.play()
+puts
+pg = PlayGames.new(3, [["alice", "white"], ["bob", "black"]])
+pg.play()
 
